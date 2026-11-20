@@ -10,5 +10,6 @@ class MaterialTests(unittest.TestCase):
         moves = [event for event in d["events"] if event["op"] == "move"]
         self.assertNotEqual(moves[0]["row"] % d["shard_count"], moves[0]["owner"])
         self.assertEqual(sum(item["op"] == "begin" and item["step"] == 2 for item in d["events"]), 2)
-        self.assertIn("inf", [v for item in d["events"] for _, row in item.get("rows", []) for v in row])
+        packets = [item for item in d["events"] if item["op"] == "packet"]
+        self.assertIn("inf", [v for item in packets for _, row in item["rows"] for v in row])
         self.assertGreater(d["row_count"], max(d["events"][-1]["rows"]))
